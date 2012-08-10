@@ -6,6 +6,8 @@ import (
 	"runtime"
 )
 
+var On = true
+
 // An Error remembers the file and line number which created it.
 type Error struct {
 	File string
@@ -17,7 +19,11 @@ func (e *Error) Error() string {
 	return fmt.Sprintf("%s %d: %s", e.File, e.Line, e.Err)
 }
 
-func New(e error) *Error {
+// If On is set to true, returns a *Error containing e; otherwise, returns e.
+func New(e error) error {
+	if !On {
+		return e
+	}
 	if r, ok := e.(*Error); ok {
 		return r
 	}
